@@ -14,6 +14,7 @@ AZLEN = LEN
 
 
 def az_ord(c):
+    c = c.lower()
     return ord(c) - ord(A)
 def az_chr(i):
     i %= AZLEN
