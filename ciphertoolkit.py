@@ -21,22 +21,53 @@ def az_chr(i):
     return chr(i + ord(A))
 
 
+def get_nonalphas(str):
+    """Get the non-alphabetical characters in (index, char) pairs."""
+    return tuple((n, c) for n, c in enumerate(str) if not c.isalpha())
+
+
+def insert_many(string, toinsert):
+    """Return string with (index, char) pairs inserted.
+
+    Indices represent the final position of the characters,
+    not where they should be inserted into the original string
+    """
+    outstr = list(string)
+    for index, char in sorted(toinsert):
+        outstr.insert(index, char)
+    return ''.join(outstr)
+
+
 class Text:
 
     _str = ''
-    _num = []
-    def __init__(self, vals=''):
+    _nonalphas = tuple()
+
+    def __init__(self, vals='', nonalphas=None):
         if isinstance(vals, str):
             self.str = vals
+        else:
+            self.num = vals
+        self._nonalphas = nonalphas or self._nonalphas
 
     @property
     def str(self):
-        return self._str
-    @str.setter(self, value):
-        self._str = value.lower()
+        return insert_many(self._str, self._nonalphas)
+
+    @str.setter
+    def str(self, value):
+        value = value.lower()
+        self._nonalphas = get_nonalphas(value)
+        self._str = ''.join(c for c in value if c.islower())
+        self._str = value
+
+    def __str__(self):
+        return self.str
 
     @property
     def num(self):
         return [az_ord(n) for n in self.str]
-    @num.setter(self, values):
+
+    @num.setter
+    def num(self, values):
         self.str = ''.join(az_chr(n) for n in values)
