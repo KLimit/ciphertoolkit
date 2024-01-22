@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """Utilities for working with ciphers."""
-import enum
-from string import ascii_lowercase as letters
+import itertools
+from string import ascii_lowercase
 
 
-@enum.global_enum
-class ALPHABET(enum.Enum):
-    A = letters[0]
-    Z = letters[-1]
-    START_ORD = ord(A)
-    END_ORD = ord(Z)
-    LEN = len(letters)
-    AZLEN = LEN
+LETTERS = ascii_lowercase
+A = LETTERS[0]
+Z = LETTERS[-1]
+START_ORD = ord(A)
+END_ORD = ord(Z)
+LEN = len(LETTERS)
+AZLEN = LEN
 
 
 def az_ord(c):
