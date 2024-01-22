@@ -59,7 +59,6 @@ class Text:
         value = value.lower()
         self._nonalphas = get_nonalphas(value)
         self._str = ''.join(c for c in value if c.islower())
-        self._str = value
 
     def __str__(self):
         return self.str
