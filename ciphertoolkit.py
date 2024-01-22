@@ -71,3 +71,22 @@ class Text:
     @num.setter
     def num(self, values):
         self.str = ''.join(az_chr(n) for n in values)
+
+    def rotate(self, rotateval, direction=1):
+        """Return a copy of the Text rotated by rotateval.
+
+        If rotateval is an iterable, cycle through its values
+        for each alphabetical character in self.
+        """
+        cls = type(self)
+        # special-case the single rotation value
+        if isinstance(rotateval, int):
+            rotateval = [rotateval]
+        rotateval = cls(rotateval).num
+        return cls(
+            (
+                ord + rotate*direction
+                for ord, rotate in zip(self.num, itertools.cycle(rotateval))
+            ),
+            nonalphas=self._nonalphas,
+        )
