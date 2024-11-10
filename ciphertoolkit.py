@@ -71,6 +71,12 @@ class Text:
 
     def __str__(self):
         return self.str
+    def __repr__(self):
+        return repr(self.str)
+    def __iter__(self):
+        return iter(self.str)
+    def __contains__(self, value):
+        return str(value) in self.str
 
     @property
     def num(self):
