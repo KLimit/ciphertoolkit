@@ -26,6 +26,11 @@ def get_nonalphas(str):
     return tuple((n, c) for n, c in enumerate(str) if not c.isalpha())
 
 
+def get_uppers(str):
+    """Get the uppercase characters as a sequence of indices."""
+    return tuple(n for n, c in enumerate(str) if c.isupper())
+
+
 def insert_many(string, toinsert):
     """Return string with (index, char) pairs inserted.
 
@@ -42,6 +47,7 @@ class Text:
 
     _str = ''
     _nonalphas = tuple()
+    _uppers = tuple()
 
     def __init__(self, vals='', nonalphas=None):
         if isinstance(vals, str):
@@ -52,20 +58,23 @@ class Text:
 
     @property
     def str(self):
-        return insert_many(self._str, self._nonalphas)
+        expanded = list(insert_many(self._str, self._nonalphas))
+        for index in self._uppers:
+            expanded[index] = expanded[index].upper()
+        return ''.join(expanded)
 
     @str.setter
     def str(self, value):
-        value = value.lower()
         self._nonalphas = get_nonalphas(value)
-        self._str = ''.join(c for c in value if c.islower())
+        self._uppers = get_uppers(value)
+        self._str = ''.join(c for c in value if c.isalpha())
 
     def __str__(self):
         return self.str
 
     @property
     def num(self):
-        return [az_ord(n) for n in self.str]
+        return [az_ord(n) for n in self._str]
 
     @num.setter
     def num(self, values):
@@ -82,10 +91,13 @@ class Text:
         if isinstance(rotateval, int):
             rotateval = [rotateval]
         rotateval = cls(rotateval).num
-        return cls(
+        rotated = cls(
             (
                 ord + rotate*direction
                 for ord, rotate in zip(self.num, itertools.cycle(rotateval))
             ),
             nonalphas=self._nonalphas,
         )
+        rotated._nonalphas = self._nonalphas
+        rotated._uppers = self._uppers
+        return rotated
