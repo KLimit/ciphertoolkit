@@ -107,3 +107,12 @@ class Text:
         rotated._nonalphas = self._nonalphas
         rotated._uppers = self._uppers
         return rotated
+
+    def autocode(self, shift=0):
+        return self.rotate(str(self)[shift:], direction=-1)
+
+    def __sub__(self, other):
+        return self.rotate(str(other), direction=-1)
+
+    def __add__(self, other):
+        return self.rotate(str(other))
